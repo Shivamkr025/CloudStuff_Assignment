@@ -3,21 +3,25 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        require: true,
     },
     description: {
         type: String,
-        required: true,
+        require: true,
     },
     email: {
         type: String,
         ref: 'User',
-        required: true,
+        require: true,
     },
     status: {
         type: String,
         enum: ['active', 'canceled'],
         default: 'active',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 });
 
