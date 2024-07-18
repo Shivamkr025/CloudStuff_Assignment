@@ -1,17 +1,19 @@
 import express from 'express';
-import {userSignup , userLogin , allUser , updateUser , deleteUser} from '../Controller/user.js'
+import * as Users from '../Controller/user.js'
+import { signupSchema } from '../Middleware/validation.js';
+import Validator from '../Middleware/validator.js';
 import { verifyToken } from '../Middleware/auth.js';
 
 const router = express.Router()
 
-router.post('/Register' , userSignup) 
+router.post('/Register' ,Validator.validate(signupSchema), Users.userSignup) 
 
-router.post('/login' , userLogin)
+router.post('/login' , Users.userLogin)
 
-router.get('/view/All' ,verifyToken , allUser) 
+router.get('/view/All' ,verifyToken , Users.allUser) 
 
-router.put('/update' , verifyToken , updateUser)
+router.put('/update' , verifyToken , Users.updateUser)
 
-router.delete('/delete' ,verifyToken , deleteUser)
+router.delete('/delete' ,verifyToken , Users.deleteUser)
 
 export default router
