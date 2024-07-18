@@ -1,6 +1,5 @@
 import { Project } from "../Model/projectModel.js";
 
-
 const createProject = async (req, res) => {
     const { name, description } = req.body;
 
@@ -9,7 +8,7 @@ const createProject = async (req, res) => {
         if (project) {
             return res.status(400).json({ message: 'Project with this name already exists for the user.' });
         }
-
+        
         const newProject = new Project({
             name,
             description,
@@ -25,8 +24,6 @@ const createProject = async (req, res) => {
 };
 
 const getProject = async (req, res) => {
-    // const { name } = req.body;
-
     try {
         const project = await Project.findOne({email: req.user.email });
         if (!project) {
@@ -39,6 +36,22 @@ const getProject = async (req, res) => {
         res.status(500).json({ error: "Something went wrong while retrieving the project." });
     }
 };
+
+
+const getAllProject = async (req, res) => {
+    try {
+        const project = await Project.find({ });
+        if (!project) {
+            return res.status(404).json({ message: "Project not found." });
+        }
+
+        res.status(200).json({ project });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Something went wrong while retrieving the project." });
+    }
+};
+
 
 const updateProject = async (req, res) => {
     const { name, newName, description } = req.body
@@ -88,4 +101,4 @@ const cancelProject = async (req, res) => {
     }
 };
 
-export {createProject , getProject , updateProject , cancelProject}
+export {createProject , getProject ,getAllProject, updateProject , cancelProject}
