@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "build":"npm i"
+  "dev": "node_modules/.bin/nodemon app.js",
+  "build": "npm install"
   },
   "author": "Shivam",
   "type": "module",
