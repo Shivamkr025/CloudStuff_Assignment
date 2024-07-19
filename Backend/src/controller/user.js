@@ -1,5 +1,5 @@
-import { User } from "../Model/userModel.js";
-import { createToken } from "../Middleware/auth.js";
+import { User } from "../model/userModel.js";
+import { createToken } from "../middleware/auth.js";
 import bcrypt from 'bcrypt'
 const salt = 10
 

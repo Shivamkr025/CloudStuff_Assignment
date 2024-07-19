@@ -1,5 +1,5 @@
-import { Task } from "../Model/taskModel.js";
-import { Project } from "../Model/projectModel.js";
+import { Task } from "../model/taskModel.js";
+import { Project } from "../model/projectModel.js";
 
 const createTask = async (req, res) => {
     const { taskName, description, status, tags, project, dueDate} = req.body;
@@ -11,9 +11,9 @@ const createTask = async (req, res) => {
             return res.status(404).json({ message: "Project not found" });
         }
 
-        // if (req.user.email !== findProject.email) {
-        //     return res.status(403).json({ message: "You do not have permission to add tasks to this project" });
-        // }
+        if (req.user.email !== findProject.email) {
+            return res.status(403).json({ message: "You do not have permission to add tasks to this project" });
+        }
 
         const task = await Task.findOne({ taskName, project: findProject.name, assignedUser:req.user.email });
 
@@ -40,10 +40,8 @@ const createTask = async (req, res) => {
 };
 
 const viewAllTask = async (req, res) => {
-    const {email} = req.body
-
     try {
-        const admin = await Task.findOne({email})
+        const admin = await Task.find({})
         if(!admin){
         res.status(404).json({message:"Task not available!"})
         }
@@ -55,31 +53,6 @@ const viewAllTask = async (req, res) => {
     }
 }
 
-const findTaskByUser = async (req, res) => {
-    try {
-        const tasks = await Task.find({ assignedUser: req.user.email });
-        if (!tasks || tasks.length === 0) {
-            return res.status(401).json({ message: "No tasks found for the assigned user" });
-        }
-
-        const groupedTasks = {
-            Backlog: [],
-            InDiscussion: [],
-            InProgress: [],
-            Done: []
-        };
-
-        tasks.forEach(task => {
-            groupedTasks[task.status.replace(' ', '')].push(task);
-        });
-
-        res.status(200).json({ message: "Tasks grouped by status fetched successfully", tasks: groupedTasks });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Something went wrong while fetching the tasks" });
-    }
-};
 
 const updateTask = async (req, res) => {
     const { taskName, description, status, tags, project, dueDate } = req.body;
@@ -144,4 +117,4 @@ const getTasksByStatus = async (req, res) => {
 
 
 
-export { createTask, viewAllTask, findTaskByUser , updateTask , deleteTask , getTasksByStatus};
+export { createTask, viewAllTask, updateTask , deleteTask , getTasksByStatus};

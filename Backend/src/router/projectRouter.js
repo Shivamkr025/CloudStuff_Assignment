@@ -1,10 +1,12 @@
 import express from 'express';
-import * as Project from '../Controller/project.js';
-import { verifyToken } from '../Middleware/auth.js';
+import * as Project from '../controller/project.js';
+import { verifyToken } from '../middleware/auth.js';
+import Validator from '../middleware/validator.js';
+import { projectValidation } from '../middleware/validation.js';
 
 const router = express.Router()
 
-router.post('/create/project' , verifyToken , Project.createProject)
+router.post('/create/project' , verifyToken , Validator.validate(projectValidation) ,  Project.createProject)
 
 router.get('/get/Project' , verifyToken , Project.getProject)
 
